@@ -20,7 +20,7 @@ class AuthverifyEmailController extends Controller
 
 
 
-        if (Auth::user()->mobile_verified_at) {
+        if (Auth::user()) {
             return redirect()->route('home');
         } else {
 

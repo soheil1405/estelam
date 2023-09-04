@@ -5,7 +5,9 @@
 
 @section('headers')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
-@endsection
+    <script src="{{ asset('/asset/jquery.js') }}"></script>
+
+    @endsection
 
 
 @section('title')
@@ -18,35 +20,44 @@
         <div class="container">
             <div class="row">
                 <div class="headback rounded">
-                    <h2 class="text-center iransansultralight">داشبورد ادمین</h2>
-
-
-
-                    <form action="" id="filterForm" class="row">
-
-                        <div class="col-3">
-                            <select class="form-control" name="filter" onchange="$('#filterForm').submit();" id="">
-                                <option @if (Request()->has('filter') && request('filter') == 'all') selected @endif value="all">آمار کلی</option>
-                                <option @if (Request()->has('filter') && request('filter') == 'today') selected @endif value="today">آمار امروز</option>
-                                <option @if (Request()->has('filter') && request('filter') == 'thisWeek') selected @endif value="thisWeek">آمار این هفته
-                                </option>
-                                <option @if (Request()->has('filter') && request('filter') == 'thisMonth') selected @endif value="thisMonth">آمار این ماه
-                                </option>
-                                <option @if (Request()->has('filter') && request('filter') == 'thisYear') selected @endif value="thisYear">آمار امسال
-                                </option>
-
-
-                            </select>
-
-                        </div>
-
-
-                        <canvas id="myChart" style="max-width: 500px;"></canvas>
-                        <canvas id="myChart2"style="max-width: 500px;"></canvas>
-
-                    </form>
+                    <h6 class="text-center iransansultralight">داشبرد ادمین</h6>
                 </div>
 
+
+
+                <span onclick="$('#form').css('display' , 'block');"  class="btn btn-success">
+
+                    ایجاد مورد جدید
+                </span>
+
+                <form  style="display: none;" id="form" action="{{route('adminn.results.store')}}" method="post">
+
+                    @csrf
+
+                    <div class="form-group">
+
+                        کد ملی کاربر (اجباری)
+                        <input type="number"  required class="form-control" name="nationalCode"  id="">
+                    </div>
+
+                    <div class="form-group">
+                      
+                       نتیحه استعلام  به فارسی
+                       (اجباری) 
+                       <textarea name="resultPersian" required id="" class="form-control" cols="30" rows="10" > </textarea>
+                    </div>
+                    <div class="form-group"> 
+                        نتیحه استعلام به انگلیسی
+                        (اختیاری)
+                        <textarea name="resultEnglish" id="" class="form-control" cols="30" rows="10" > </textarea>
+                    </div>
+                    <input type="submit" value="ذخیره" class="btn btn-success">
+                
+                    <span onclick="$('#form').css('display' , 'none');"  class="btn btn-danger">
+                        بستن
+                    </span>
+
+                </form>
 
 
 
@@ -54,66 +65,5 @@
         </div>
     </div>
 
-    <script>
-        var xValues = ["تعداد پاسخ های درست", "تعداد پاسخ های غلط"];
-
-
-        var yValues = [{{ count($currectAnswers) }}, {{ count($wrongAnswers) }}];
-        var barColors = [
-            "#b91d47",
-            "#1e7145"
-        ];
-
-        new Chart("myChart", {
-            type: "pie",
-            data: {
-                labels: xValues,
-                datasets: [{
-                    backgroundColor: barColors,
-                    data: yValues
-                }]
-            },
-            options: {
-                title: {
-                    display: true,
-                    text: "تعداد کل پاسخ ها :" + {{ count($currectAnswers) + count($wrongAnswers) }}
-                }
-            }
-        });
-
-
-
-
-        var xValues = ["تعداد کل شرکت کنندگان", "تعداد پاسخ های درست", "تعداد پاسخ های غلط" , " "];
-        var yValues = [ {{ count($currectAnswers) + count($wrongAnswers) }}, {{ count($currectAnswers)  }}, {{count($wrongAnswers)}} , 0];
-        var barColors = ["blue", "green", "red"];
-
-        new Chart("myChart2", {
-            type: "bar",
-            data: {
-                labels: xValues,
-                datasets: [{
-                    backgroundColor: barColors,
-                    data: yValues
-                }]
-            },
-            options: {
-                legend: {
-                    display: false
-                },
-                title: {
-                    display: true,
-                    text: "آمار کل "
-                },
-
-                interaction: {
-                    mode: 'index',
-                    axis: 'y'
-                },
-
-
-            }
-
-        });
-    </script>
+    
 @endsection

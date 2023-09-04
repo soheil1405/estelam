@@ -1,4 +1,15 @@
 <?php return array (
+  'hekmatinasser/verta' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Hekmatinasser\\Verta\\Laravel\\VertaServiceProvider',
+    ),
+    'aliases' => 
+    array (
+      'Verta' => 'Hekmatinasser\\Verta\\Verta',
+    ),
+  ),
   'laravel/sail' => 
   array (
     'providers' => 
@@ -39,6 +50,17 @@
     'providers' => 
     array (
       0 => 'Termwind\\Laravel\\TermwindServiceProvider',
+    ),
+  ),
+  'realrashid/sweet-alert' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'RealRashid\\SweetAlert\\SweetAlertServiceProvider',
+    ),
+    'aliases' => 
+    array (
+      'Alert' => 'RealRashid\\SweetAlert\\Facades\\Alert',
     ),
   ),
   'spatie/laravel-ignition' => 

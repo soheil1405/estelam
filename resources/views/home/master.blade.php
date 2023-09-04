@@ -2,6 +2,8 @@
 <html dir="rtl" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
+
+    <title> استعلام مدرک تحصیلی  </title>
     @yield('headers')
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,9 +16,12 @@
     <link href="{{ asset('/asset/main/css/responsive.css') }}" rel="stylesheet">
 
 
-
     <script src="{{ asset('/asset/jquery.js') }}"></script>
-</head>
+    @include('sweetalert::alert')
+ 
+    
+
+   </head>
 
 <body class="antialiased">
 
@@ -30,5 +35,8 @@
 
 
 </body>
+<script src="{{ asset('/asset/jquery.js') }}"></script>
+
+@include('sweetalert::alert', ['cdn' => "https://cdn.jsdelivr.net/npm/sweetalert2@9"])
 
 </html>

@@ -19,25 +19,19 @@ class HomeLandController extends Controller
         
         
         if (!is_null($user)) {
-       
-       
-            if($user->email_verified_at){
-          
-                
-                                
-                
-                return view('welcome');
-
-            }else{
-                return redirect()->route('verifyEmailPage');
-                
-            }
+    
+            return redirect()->route('home');
        
        
         }else{
-            return view('welcome');
+  
+            return redirect()->route('adminn.panel');
+       
+
         }
         
     }
 
 }
+
+    

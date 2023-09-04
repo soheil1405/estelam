@@ -9,40 +9,28 @@ class HomeLandController extends Controller
 {
 
 
-    public function home(){
+    public function step1(){
 
-
-
-
-        $user = Auth::user();
-
-
+        $user = Auth::user();        
         
-        
-        
-        if (!is_null($user)) {
-       
-       
-            
-
-            if($user->mobile_verified_at){
-          
-                
-                                
-                
-                return view('welcome');
-
-            }else{
-                
-                return redirect()->route('verifyMobile');
-                
-            }
-       
-       
-        }else{
+        if (is_null($user)) {
+                               
             return view('welcome');
+        
+        }else{
+            return redirect()->route('adminn.panel');
         }
         
     }
 
+
+    public function step2(){
+   
+        return view('step2');
+   
+    }
+
+    public function step3(){
+        return view('step3');
+    }
 }

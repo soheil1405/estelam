@@ -34,79 +34,54 @@ class LoginController extends Controller
         if ($request->type == "forgot") {
 
 
-
-            // $request->validate([
-
-            //     'number' => 'required|digits:11|exists:users,number',
-            // ]);
-
-            $user = User::where('number', $request->number)->first();
+            $user = User::where('email', $request->email)->first();
 
 
-
-
+            
 
             if (is_null($user)) {
                 
-                return response()->json('شماره وارد شده معتبر نیست' , 403);
+                session()->flash('customError', 'ایمیل وارد شده اشتباه است');
+                return redirect()->back();
+
             }
 
-            session()->put('number' , $user->number);
+            session()->put('email' , $user->email);
 
             return redirect()->route('auth.sendForgotPassCode');
-
-
-
 
         } else {
 
             $request->validate([
                 'password' => 'required|min:4',
-                'number' => 'required|digits:11|exists:users,number',
+                'email' => 'required|email|exists:users,email',
             ]);
 
+            $user = User::where('email', $request->email)->first();
 
+            if (!$user) {
+                session()->flash('customError', 'کاربری با این مشخصات یافت نشد ');
+                return redirect()->back();
+            }
+            $check = Hash::check($request->password, $user->password);
 
-            $user = User::where('number', $request->number)->first();
-
-
-            if ($user) {
-                $check = Hash::check($request->password, $user->password);
-
-                if ($check) {
-                    Auth::login($user);
-
-                    session()->flash('wellcome', 'خوش آمدید');
-
-                    if (Auth::user()->role->role_id != 2) {
-
-
-                        return redirect()->route('home');
-
-
-                    } else {
-                        return redirect()->route('adminn.panel');
-
-                    }
-
-
-                } else {
-
-                    session()->flash('customError', 'رمز عبور وارد شده اشتباه است');
-                    return redirect()->back();
-                }
-
+            if ($check) {
+                Auth::login($user);
+                session()->flash('wellcome', 'خوش آمدید');
+                return redirect()->route('adminn.panel');
 
             } else {
 
-                session()->flash('customError', 'کاربری با این مشخصات یافت نشد ');
+                session()->flash('customError', 'رمز عبور وارد شده اشتباه است');
                 return redirect()->back();
-
             }
 
 
 
-        }
+            
+
+
+    }
 
 
 

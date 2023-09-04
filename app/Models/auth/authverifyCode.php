@@ -12,7 +12,7 @@ class authverifyCode extends Model
     protected $fillable = [
         'user_id',
         'code',
-        'for'
+
     ];
 
 

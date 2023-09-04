@@ -16,6 +16,8 @@
     <script src="{{ asset('/asset/bootstrap/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('/asset/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 
+    <script src="{{ asset('/asset/jquery.js') }}"></script>
+
 
 
 

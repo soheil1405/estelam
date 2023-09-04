@@ -4,45 +4,43 @@
 
 
 @section('headers')
+<script src="{{ asset('/asset/jquery.js') }}"></script>
+
 @endsection
 
 
 @section('title')
-    لیست کاربران
+    لیست نتایج
 @endsection
 
 @section('content')
-    @if ($errors->has('created'))
-        <span class="text-danger">{{ $errors->first('created') }}</span>
-    @endif
-
-
-
-
-    @if (Session::has('created'))
-        <span class="text-success">{{ Session::get('created') }}</span>
-    @endif
-
-    @if (Session::has('deleteStatus'))
-        <span class="text-success">{{ Session::get('deleteStatus') }}</span>
-    @endif
-
-    
-    @if (Session::has('edited'))
-        <span class="text-success">{{ Session::get('edited') }}</span>
-    @endif
 
     <div class="container-fluid background-math">
     <div class="headback rounded">
         <div class="container">
             <div class="row">
             
-                    <h2 class="text-center iransansultralight">
+         
+                <form class="" style="display: flex !important;">
+                    <input class="form-control" name="search" type="search" 
+                    
+                    @if (request()->has('search'))
                         
-                        لیست کاربران
-                    ({{count($rols)}})
-                    </h2>
-                </div>
+                        value = "{{ request('search') }}"
+                    @else
+                    placeholder="برای جستجو ایدی یا کد ملی مورد نظر را وارد کنید ..." 
+                        
+                    @endif
+
+                    
+                    
+                    aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">جستجو</button>
+                </form>
+
+                <a href="{{route('adminn.panel')}}" class="btn btn-succcess">
+                    ایجاد
+                </a>
             </div>
             <div class="row bg-white rounded">
 
@@ -52,30 +50,20 @@
                             <thead>
 
                                 <th>
-                                    کد کاربری
+
+                                     ایدی
                                 </th>
 
                                 <th>
-                                    نام
+                                    کد ملی
                                 </th>
 
                                 <th>
-                                    شماره تلفن
+                                    تاریخ ایجاد
                                 </th>
 
                                 <th>
-                                    تاریخ عضویت
-                                </th>
-
-                                <th>
-                                    تعداد مسابقات شرکت کرده
-                                </th>
-                                <th>
-                                    تعداد جواب های درست
-                                </th>
-
-                                <th>
-                                    تعداد جواب های غلط
+                                    تاریخ اخرین ویرایش
                                 </th>
                                 <th>
                                     عملیات
@@ -85,49 +73,38 @@
 
                             <tbody>
 
-                                @foreach ($rols as $rol)
+                                @foreach ($items as $item)
                                     <tr>
 
                                         <th>
 
-                                            {{ $rol->users->id }}
+                                            {{ $item->id }}
 
                                         </th>
 
                                         <th>
 
-                                            {{ $rol->users->firstname }} - {{ $rol->users->lastname }}
+                                            {{ $item->nationalCode }}
 
                                         </th>
 
                                         <th>
-                                        {{
-                                            $rol->users->number
-                                        }}
-                                        </th>
 
-                                        <th>
-                                            {{ $rol->users->created_at }}
-                                        </th>
+                                            {{ verta( $item->created_at) }}
 
-                                        <th>
-                                            {{ $rol->users->allAnwers_count }}
                                         </th>
 
                                         <th>
 
-                                            {{ $rol->users->CurrectAnwers_count }}
+                                            {{ verta($item->updated_at) }}
+
                                         </th>
 
-                                        <th>
-
-                                            {{ $rol->users->WrongAnwers_count }}
-                                        </th>
                                         
                                         <th>
 
                                             <a class="btn btn-warning" 
-                                            href="{{route('adminn.users.edit' , ['user'=>$rol->users])}}"
+                                            href="{{route('adminn.results.edit' , ['result'=>$item])}}"
                                             
                                             
                                             ><svg
@@ -137,10 +114,10 @@
                                                         d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
                                                     <path fill-rule="evenodd"
                                                         d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
-                                                </svg><span class="p-3">ویرایش</span></a>
+                                                </svg><span class="p-3">مشاهده و ویرایش</span></a>
 
                                                 <button type="button" class="btn btn-danger"
-                                                    onclick="deleteee({{$rol->users->id}})">
+                                                    onclick="deleteee({{$item->id}})">
 
 
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
@@ -153,21 +130,13 @@
 
                                                 </button>
 
-                                            <a class="btn btn-info"
-                                                href="{{ route('adminn.users.show', ['user' => $rol->users]) }}"><svg
-                                                    xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                                    fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
-                                                    <path
-                                                        d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
-                                                </svg><span class="p-3">مشاهده کاربر</span>
-                                            </a>
 
                                         </th>
                                         
-                                        <form id="deleteForm" action="{{route('adminn.users.destroy' , ['user'=>$rol->users])}}" method="post">
+                                        <form id="deleteForm" action="{{route('adminn.results.destroy' , ['result'=>$item])}}" method="post">
                                             @csrf
                                             @method('DELETE')
-                                            <input type="hidden" name="Uid" id="Uid" value="{{$rol->users->id}}" >
+                                            <input type="hidden" name="Uid" id="Uid" value="{{$item->id}}" >
 
                                         </form>
 
@@ -197,7 +166,7 @@
     function deleteee(id) {
 
 
-        var answer = window.confirm("آیا میخواهید این کاربر را حذف کنید ؟");
+        var answer = window.confirm("آیا میخواهید این مورد را حذف کنید ؟");
         if (answer) {
             $('#Uid').val(id);
 
