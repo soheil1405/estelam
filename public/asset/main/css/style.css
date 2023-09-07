@@ -388,10 +388,7 @@ select2.min.css
 site.css
  */
  
-@font-face {
-    font-family: vazir;
-    src: url('../fonts/Vazir-FD.ttf');
-  }
+ 
 
 body {
     background-color: #efefef;
@@ -1281,3 +1278,14 @@ form{
   left: 0 !important;
 }
 
+
+.noscript{
+  display: none;
+}
+
+
+.active{
+  font-weight: bolder;
+  scale: 1.4;
+  /* color: black !important; */
+}

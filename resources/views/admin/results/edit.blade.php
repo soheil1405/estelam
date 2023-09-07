@@ -26,6 +26,11 @@
     </div>
 
     <div class="form-group">
+        عنوان مدرک(اجباری)
+        <input type="text" value="{{$result->title}}"  required class="form-control" name="title"  id="">
+    </div>
+    
+    <div class="form-group">
       
        نتیحه استعلام  به فارسی
        (اجباری) 

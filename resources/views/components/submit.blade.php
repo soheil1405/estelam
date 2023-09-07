@@ -4,10 +4,10 @@
         <div class="custom-model-wrap">
             <div class="pop-up-content-wrap p-5">
                 
-                <span style="text-align: right;">
+                <div class="alert alert-danger p-md-5" style=" color:black; float:right; text-align: right; padding:10px;" >
                     
                     {{ $text }}
-                </span> 
+                </div> 
 
                 @if ($image)
                 <hr>

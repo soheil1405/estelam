@@ -30,7 +30,7 @@
                     ایجاد مورد جدید
                 </span>
 
-                <form  style="display: none;" id="form" action="{{route('adminn.results.store')}}" method="post">
+                <form  style="display: none;" id="form" action="{{route('adminn.results.store')}}" method="post" enctype="multipart/form-data">
 
                     @csrf
 
@@ -38,6 +38,10 @@
 
                         کد ملی کاربر (اجباری)
                         <input type="number"  required class="form-control" name="nationalCode"  id="">
+                    </div>
+                    <div class="form-group">
+                        عنوان مدرک(اجباری)
+                        <input type="text"  required class="form-control" name="title"  id="">
                     </div>
 
                     <div class="form-group">
@@ -50,6 +54,22 @@
                         نتیحه استعلام به انگلیسی
                         (اختیاری)
                         <textarea name="resultEnglish" id="" class="form-control" cols="30" rows="10" > </textarea>
+                    </div>
+
+
+
+                    <div class="form-group">
+                      
+                        <img src="" id="filePersian" alt="">
+                        قایل فارسی(اختیاری) 
+                        <input type="file" accept="image/png, image/gif, image/jpeg" name="filePersian" id="">
+                    </div>
+
+                    <div class="form-group">
+                      
+                        <img src="" id="fileEnglish" alt="">
+                        قایل انگلیسی(اختیاری) 
+                        <input type="file" accept="image/png, image/gif, image/jpeg" name="fileEnglish" id="">
                     </div>
                     <input type="submit" value="ذخیره" class="btn btn-success">
                 

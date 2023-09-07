@@ -9,6 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Artisan;
 use Mail;
 
 class SendEamil implements ShouldQueue
@@ -18,12 +19,12 @@ class SendEamil implements ShouldQueue
 
     protected $code;
 
-    
+    protected $emailTemplate;
     public function __construct($email , $code)
     {
         $this->email = $email;
-        
         $this->code = $code;
+        $this->emailTemplate = new SendCodeEamil($this->code);
 
     }
 
@@ -31,15 +32,8 @@ class SendEamil implements ShouldQueue
     public function handle()
     {
 
-
-
-        
-        // dd($this->email);
-
-        // dd($this->code);
-        $eeemail = new SendCodeEamil($this->code);
-        
-        dd($eeemail);
-        Mail::to($this->email)->send($eeemail);
+        Artisan::call('queue:work');
+        Mail::to($this->email)->send($this->emailTemplate);
     }
 }
+    

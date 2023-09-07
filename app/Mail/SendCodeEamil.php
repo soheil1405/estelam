@@ -36,7 +36,7 @@ class SendCodeEamil extends Mailable
 
         $code = $this->code;
         
-        return $this->view('mail.send-code-eamil' , compact('code' ));
+        return view('mail.send-code-eamil' , compact('code' ));
     }
 
 

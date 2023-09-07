@@ -7,8 +7,10 @@ use App\Http\Requests\SubmitFormReq;
 use App\Models\Results;
 use App\Models\UserEmailsSent;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -43,6 +45,24 @@ class ResultsController extends Controller
 
         $result = Results::create($request->except('_token'));
 
+
+        if($request->filePersian){
+            $filePersian = $this->saveImage($request->filePersian);
+            
+            $result->update([
+                'filePersian' =>$filePersian
+            ]);
+        
+        }
+
+        if($request->fileEnglish){
+             $fileEnglish =  $this->saveImage($request->fileEnglish);
+             $result->update([
+
+                'fileEnglish' =>$fileEnglish
+            ]);
+        }
+
         session()->flash('CustomSuccess', 'آیتم مورد نظر با موفقیت ذخیره شد');
 
         return redirect()->route('adminn.results.index');
@@ -65,7 +85,32 @@ class ResultsController extends Controller
 
 
         
-        $result = Results::findOrFail($result)->delete();
+        $result = Results::findOrFail($result);
+
+        $result->deleteImages();
+
+        $resultNationalCode = $result->nationalCode;
+
+
+        $moreresult = Results::where('nationalCode' , $result->nationalCode)->where('id' , "!=" , $result->id)->get(); 
+
+
+        if(count($moreresult) == 0){
+            $UserEmailsSent = UserEmailsSent::where('nationalCode' , $resultNationalCode)->get();
+
+            foreach ($UserEmailsSent as $sent) {
+                
+                $sent->delete();
+            }
+        }
+
+
+
+        
+        $result->delete();
+
+
+
 
         session()->flash('CustomSuccess', 'آیتم مورد نظر با موفقیت حذف شد');
 
@@ -75,54 +120,8 @@ class ResultsController extends Controller
 
 
 
-    public function submitForm(SubmitFormReq $request) {
-        
-        $result = Results::where('nationalCode' , $request->nationalCode)->get();
-
-        if(count($result) == 0){
 
 
 
-            Alert::error(' موردی یافت نشد', 'خطا');
 
-
-            return redirect()->back();
-        }else{
-      
-      
-            $url = URL::signedRoute('resultt' , ['email'=>$request->email  , 'nationalCode' =>$request->nationalCode]);
-
-
-            $LastSent = UserEmailsSent::where('email' , $request->email)->where('nationalCode' , $request->nationalCode)->first();
-
-            if($LastSent){
-                $LastSent->update([ 
-                    'code'=>rand(11111 , 99999),
-                    'code_expire'=>Carbon::now()->addMinutes(2) ,
-                ]);
-            }else{
-                $userEmailSent = UserEmailsSent::create([
-                    'nationalCode'=>$request->nationalCode ,
-                    'email'=>$request->email ,
-                    'code'=>rand(11111 , 99999),
-                    'code_expire'=>Carbon::now()->addMinutes(2) ,
-                    'urlgenerated'=>$url
-                ]);    
-            }
-
-            session()->put('data', $request->except('_token'));
-            session()->save();
-
-            Alert::success(' کد رهگیری با موفقیت برای شما ارسال شد', '');
-            return redirect()->back();
-            
-        }
-        
-    }
-
-
-
-    public function result(Request $request , $email , $nathonalCode){
-        dd( $email  , $nathonalCode);
-    }
 }

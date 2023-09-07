@@ -38,7 +38,7 @@
 
 
             <div class="row bg-white">
-                <div class="col-md-6 h-400px divvorod mt-4 ">
+                <div class="col-md-6 m-auto h-400px divvorod mt-4 ">
                     <h2 class="h4">ورود</h2>
                     <form action="{{ route('login') }}" id="loginForm" method="post">
 

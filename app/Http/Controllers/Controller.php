@@ -12,6 +12,9 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Orders;
+use App\Models\UserEmailsSent;
+use Illuminate\Support\Facades\Storage;
+
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
@@ -176,4 +179,58 @@ class Controller extends BaseController
         }
     }
 
+
+
+
+    public function checkDataAndEmailFromSession($emailcheck = null){
+        $email = getFromSessiom('data' , 'email' , 'string');
+
+
+        if(!$email){
+
+
+            $msg =  'ابتدا اطلاعات زیر را وارد کنید' ;
+
+            return ['status'=>401 , 'url'=>'home' , 'msg'=>$msg];
+        
+        }else{
+            $emailSent = UserEmailsSent::where('email' , $email)->first();
+
+            if(is_null($emailSent)){
+                $msg = "ابتدا اطلاعات زیر را وارد کنید";
+                session()->flash('CustomErr' , '');
+                return ['status'=>401 , 'url'=>'home' , 'msg'=>$msg];
+            
+            }
+            
+            
+            if($emailcheck && $email != $emailcheck){
+
+                $msg = "خطا ...";
+
+         
+                return ['status'=>401 , 'url'=>'home' , 'msg'=>$msg];
+            
+            
+            }
+
+            return ['status' => 200 , 'email'=>$emailSent ];
+        }
+    }
+
+
+    public function saveImage($file){
+        $name =now()  . $file->getClientOriginalName();
+
+
+        
+
+        // Storage::disk('public')->put($name , file_get_contents($file));
+      
+        $file->move(public_path('images'), $name);
+        
+        $url = "images/".$name;
+
+        return $url;
+    }
 }
